@@ -46,14 +46,6 @@ input, textarea { font-family: inherit; }
 .screen { display: none; flex-direction: column; min-height: 100dvh; }
 .screen.active { display: flex; }
 
-/* ── Status bar ── */
-.sbar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 20px 2px; flex-shrink: 0;
-}
-.sbar-time { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; }
-.sbar-icons { display: flex; align-items: center; gap: 5px; opacity: 0.7; }
-
 /* ── Top bar ── */
 .topbar {
   display: flex; align-items: center; gap: 10px;
@@ -375,13 +367,6 @@ input, textarea { font-family: inherit; }
 
 <!-- ── S1: Lista facturi ── -->
 <div class="screen active" id="s-list">
-  <div class="sbar">
-    <span class="sbar-time">9:41</span>
-    <div class="sbar-icons">
-      <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="2.5" width="3" height="8.5" rx="1"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="1"/><rect x="9" y="0" width="3" height="11" rx="1"/><rect x="13.5" y="1" width="2.5" height="10" rx="1" opacity=".3"/></svg>
-      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/></svg>
-    </div>
-  </div>
   <div class="topbar">
     <div style="flex:1"><div class="tb-title">Facturi emise</div></div>
     <button class="btn outline icon-only" onclick="return false">
@@ -415,7 +400,6 @@ input, textarea { font-family: inherit; }
 
 <!-- ── S2: Client (Step 1) ── -->
 <div class="screen" id="s-company">
-  <div class="sbar"><span class="sbar-time">9:41</span><div class="sbar-icons"><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/></svg></div></div>
   <div class="topbar">
     <button class="btn outline icon-only" onclick="goTo('s-list')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4l-5 4 5 4"/></svg></button>
     <div style="flex:1"><div class="tb-title">Către cine emiți factura?</div></div>
@@ -451,7 +435,6 @@ input, textarea { font-family: inherit; }
 
 <!-- ── S3: Sumă (Step 2) ── -->
 <div class="screen" id="s-amount">
-  <div class="sbar"><span class="sbar-time">9:41</span><div class="sbar-icons"><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/></svg></div></div>
   <div class="topbar">
     <button class="btn outline icon-only" onclick="goTo('s-company')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4l-5 4 5 4"/></svg></button>
     <div style="flex:1"><div class="tb-title" id="amt-co-name">–</div><div class="tb-sub" id="amt-co-cui">–</div></div>
@@ -495,7 +478,6 @@ input, textarea { font-family: inherit; }
 
 <!-- ── S4: Sumar factură (Step 3) ── -->
 <div class="screen" id="s-summary">
-  <div class="sbar"><span class="sbar-time">9:41</span><div class="sbar-icons"><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/></svg></div></div>
   <div class="topbar">
     <button class="btn outline icon-only" onclick="goTo('s-amount')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4l-5 4 5 4"/></svg></button>
     <div style="flex:1"><div class="tb-title">Sumar factură</div><div class="tb-sub" id="sum-sub">–</div></div>
@@ -548,7 +530,6 @@ input, textarea { font-family: inherit; }
 
 <!-- ── S5: Factură emisă cu succes ── -->
 <div class="screen" id="s-success">
-  <div class="sbar"><span class="sbar-time">9:41</span><div class="sbar-icons"><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/></svg></div></div>
   <div class="topbar"><div style="flex:1"><div class="tb-title">Detalii factură</div></div></div>
   <div class="sbody">
     <div style="text-align:center;padding:24px 0 20px">
