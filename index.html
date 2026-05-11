@@ -76,13 +76,30 @@ input, textarea { font-family: inherit; }
 .tb-title { font-size: 15px; font-weight: 600; flex: 1; }
 .tb-sub { font-size: 11px; color: #7A7570; margin-top: 1px; }
 .tb-meta { font-size: 12px; color: #7A7570; }
-.back-btn {
-  width: 34px; height: 34px; border-radius: 50%;
-  border: 1px solid rgba(17,13,16,.12); background: #fff;
-  display: flex; align-items: center; justify-content: center;
-  color: #110D10; flex-shrink: 0; padding: 0;
-}
-.back-btn:active { background: #EFEBE4; }
+/* ── Icon button (DS: .btn.outline.icon-only) ── */
+.btn { height: 40px; border: none; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all .14s; flex-shrink: 0; font-size: 14px; font-weight: 600; border-radius: 999px; }
+.btn.primary { background: #EE4379; color: #fff; }
+.btn.primary:active { background: #C9255B; }
+.btn.outline { background: transparent; color: #110D10; box-shadow: inset 0 0 0 1px rgba(17,13,16,.12); }
+.btn.outline:active { background: #EFEBE4; }
+.btn.outline-pink { background: #fff; color: #110D10; box-shadow: inset 0 0 0 1px #EE4379; }
+.btn.outline-pink:active { background: #EE4379; color: #fff; }
+.btn.ghost { background: transparent; color: #7A7570; }
+.btn.ghost:active { color: #110D10; background: #EFEBE4; }
+.btn.danger { background: #B42318; color: #fff; }
+.btn.danger:active { background: #9D1818; }
+.btn.sm { height: 32px; padding: 0 16px; font-size: 13px; }
+.btn.lg { height: 52px; padding: 0 32px; font-size: 16px; }
+.btn.full { width: 100%; }
+.btn.icon-only { padding: 0; aspect-ratio: 1; border-radius: 50%; }
+
+/* ── Badges (DS) ── */
+.badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.badge.success { background: #ECF7F1; color: #1F7A4D; }
+.badge.warn    { background: #FBF1E2; color: #B8580A; }
+.badge.error   { background: #FDECEA; color: #B42318; }
+.badge.neutral { background: #EFEBE4; color: #7A7570; }
+.badge.pink    { background: #FDE7F0; color: #C9255B; }
 .close-btn {
   background: none; border: none; font-size: 14px;
   color: #7A7570; padding: 0; line-height: 1;
@@ -107,48 +124,6 @@ input, textarea { font-family: inherit; }
   color: #7A7570; display: flex; align-items: center; gap: 6px; padding: 18px 0 8px;
 }
 .eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: #EE4379; }
-
-/* ── Bottom nav ── */
-.bottom-nav {
-  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 100%; max-width: 430px; z-index: 20;
-  background: #fff; border-top: 1px solid rgba(17,13,16,.06);
-  display: flex; padding: 6px 0 calc(8px + env(safe-area-inset-bottom,0px));
-}
-.bottom-nav a {
-  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
-  color: #ABA59E; font-size: 10px; font-weight: 500;
-  letter-spacing: .05em; text-transform: uppercase;
-  padding: 5px 0; text-decoration: none; transition: color .14s;
-}
-.bottom-nav a.active { color: #110D10; }
-.bottom-nav a.active svg { color: #EE4379; }
-.bottom-nav svg { width: 20px; height: 20px; }
-
-/* ── FAB (Factură nouă) ── */
-.new-invoice-btn {
-  position: fixed;
-  bottom: 70px;
-  right: 16px;
-  z-index: 30;
-  background: #EE4379;
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  height: 52px;
-  padding: 0 22px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  box-shadow: 0 6px 16px rgba(238,67,121,.30);
-  cursor: pointer;
-  transition: all .14s;
-  white-space: nowrap;
-}
-.new-invoice-btn:active { transform: scale(.97); }
-.new-invoice-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
 
 /* ── Bottom CTA bar ── */
 .bottom-cta {
@@ -179,32 +154,28 @@ input, textarea { font-family: inherit; }
   font-size: 15px; color: #110D10; outline: none; transition: border-color .14s, box-shadow .14s;
 }
 .search-wrap input::placeholder { color: #ABA59E; }
-.search-wrap input:focus { border-color: #EE4379; box-shadow: 0 0 0 3px rgba(238,67,121,.12); }
+.search-wrap input:focus { border-color: #7A7570; box-shadow: 0 0 0 3px rgba(17,13,16,.08); }
 .search-ic { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #7A7570; pointer-events: none; width: 16px; height: 16px; }
 
-/* ── Invoice list item ── */
-.inv-list { display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+/* ── Invoice list ── */
+.inv-list { display: flex; flex-direction: column; padding-top: 4px; }
 .inv-item {
-  background: #fff; border: 1px solid rgba(17,13,16,.12); border-radius: 14px;
-  padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer;
-  transition: border-color .14s;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid rgba(17,13,16,.06); cursor: pointer;
 }
-.inv-item:active { border-color: rgba(238,67,121,.35); }
+.inv-item:last-child { border-bottom: none; }
+.inv-item:active { opacity: .65; }
 .inv-icon {
   width: 40px; height: 40px; border-radius: 10px; background: #EFEBE4;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 700; letter-spacing: -.03em; flex-shrink: 0;
 }
 .inv-info { flex: 1; min-width: 0; }
-.inv-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
-.inv-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #7A7570; }
+.inv-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+.inv-meta { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 12px; color: #7A7570; }
 .inv-right { text-align: right; flex-shrink: 0; }
-.inv-amount { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
-/* badges */
-.badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 999px; font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
-.badge-draft { background: #EFEBE4; color: #7A7570; }
-.badge-ok { background: #ECF7F1; color: #1F7A4D; }
-.badge-due { background: #FBF1E2; color: #B8580A; }
+.inv-amount { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; color: #110D10; }
+/* badges handled by DS .badge block above */
 
 /* ── Alert banner ── */
 .alert-banner {
@@ -213,8 +184,11 @@ input, textarea { font-family: inherit; }
   border-radius: 12px; padding: 12px 14px; margin: 12px 0 4px; cursor: pointer;
 }
 .alert-banner:active { background: #f9d4e5; }
-.alert-banner-text { flex: 1; font-size: 13px; color: #C9255B; line-height: 1.45; }
+.alert-banner-text { flex: 1; font-size: 14px; color: #C9255B; line-height: 1.45; }
 .alert-banner-text strong { font-weight: 600; }
+.alert-banner.neutral { background: #EFEBE4; border: 1px solid rgba(17,13,16,.10); }
+.alert-banner.neutral:active { background: #E5E0D8; }
+.alert-banner.neutral .alert-banner-text { color: #110D10; }
 
 /* ── Company list ── */
 .co-item {
@@ -247,12 +221,20 @@ input, textarea { font-family: inherit; }
   color: #ABA59E; font-variant-numeric: tabular-nums; transition: color .1s;
 }
 .amount-number.has-value { color: #110D10; }
+.amount-input {
+  background: transparent; border: none; outline: none;
+  font-size: 64px; font-weight: 700; letter-spacing: -.045em; line-height: 1;
+  font-variant-numeric: tabular-nums; text-align: center;
+  color: #ABA59E; width: 200px; max-width: 60vw; padding: 0;
+  caret-color: #EE4379; -webkit-tap-highlight-color: transparent;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.amount-input:not(:placeholder-shown) { color: #110D10; }
+.amount-input::placeholder { color: #ABA59E; }
 .amount-ccy { font-size: 20px; font-weight: 400; color: #ABA59E; padding-bottom: 8px; }
 .amount-hint { font-size: 12px; color: #7A7570; text-align: center; margin-bottom: 6px; min-height: 16px; }
 .tva-toggle-row {
   display: flex; align-items: center; gap: 10px;
-  padding: 10px 16px; background: #fff;
-  border: 1px solid rgba(17,13,16,.12); border-radius: 999px;
   margin-bottom: 24px; cursor: pointer; width: 100%; max-width: 320px;
 }
 .tva-toggle-row .label { flex: 1; font-size: 14px; font-weight: 500; }
@@ -265,10 +247,13 @@ input, textarea { font-family: inherit; }
 .toggle-sw.on::after { transform: translateX(16px); }
 .chips-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 20px; width: 100%; max-width: 320px; }
 .chip {
-  padding: 6px 14px; border-radius: 999px; background: #fff; border: 1px solid rgba(17,13,16,.12);
-  font-size: 13px; font-weight: 500; color: #7A7570; cursor: pointer; font-variant-numeric: tabular-nums;
+  height: 30px; padding: 0 18px; border-radius: 999px;
+  background: transparent; border: 1px solid rgba(17,13,16,.12);
+  font-size: 13px; font-weight: 600; color: #110D10;
+  cursor: pointer; font-variant-numeric: tabular-nums;
+  display: inline-flex; align-items: center;
 }
-.chip:active { background: #FDE7F0; border-color: #EE4379; color: #C9255B; }
+.chip:active { background: #EFEBE4; }
 /* Numpad */
 .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 320px; }
 .nk {
@@ -296,51 +281,38 @@ input, textarea { font-family: inherit; }
 .detail-row.tappable:active { background: rgba(17,13,16,.03); }
 .detail-label { font-size: 12px; color: #7A7570; flex-shrink: 0; margin-right: 12px; padding-top: 1px; white-space: nowrap; }
 .detail-value { font-size: 14px; font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; max-width: 68%; word-break: break-all; line-height: 1.4; }
-.detail-value.large { font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
+.detail-value.large { font-size: 17px; font-weight: 700; letter-spacing: -.02em; white-space: nowrap; }
 .detail-value.iban { font-size: 11px; font-weight: 400; }
 .detail-value.muted { font-size: 12px; font-weight: 400; color: #7A7570; font-style: italic; }
 .modify-hint { font-size: 11px; color: #EE4379; font-weight: 500; margin-top: 2px; text-align: right; }
 
 /* ── Success screen ── */
-.inv-card-dark {
-  background: #110D10; border-radius: 16px; padding: 20px;
-  margin: 0 0 10px; color: #fff; position: relative; overflow: hidden;
+.inv-card-success {
+  background: #fff; border: 1px solid rgba(17,13,16,.12); border-radius: 20px;
+  padding: 20px; margin: 0 0 10px;
 }
-.inv-card-dark::before { content: ''; position: absolute; right: -20px; top: -20px; width: 110px; height: 110px; border-radius: 50%; background: rgba(238,67,121,.14); }
-.inv-card-dark .tag { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.45); margin-bottom: 4px; }
-.inv-card-dark .number { font-size: 15px; font-weight: 700; letter-spacing: -.02em; color: #fff; margin-bottom: 14px; }
-.inv-card-dark .company { font-size: 13px; color: rgba(255,255,255,.65); margin-bottom: 2px; }
-.inv-card-dark .amount-big { font-size: 32px; font-weight: 700; letter-spacing: -.04em; color: #fff; font-variant-numeric: tabular-nums; margin-top: 12px; line-height: 1; }
-.inv-card-dark .amount-big .ccy { font-size: 14px; font-weight: 400; color: rgba(255,255,255,.5); margin-left: 6px; }
-.inv-card-dark .due { font-size: 12px; color: rgba(255,255,255,.45); margin-top: 6px; }
-.share-row { display: flex; gap: 8px; margin-top: 14px; }
-.share-btn {
-  flex: 1; height: 38px; border-radius: 999px;
-  background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.14);
-  font-size: 12px; font-weight: 500; color: rgba(255,255,255,.8);
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-}
-.share-btn:active { background: rgba(255,255,255,.2); }
+.inv-card-success .tag { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #7A7570; margin-bottom: 4px; }
+.inv-card-success .number { font-size: 15px; font-weight: 700; letter-spacing: -.02em; color: #110D10; margin-bottom: 14px; }
+.inv-card-success .company { font-size: 12px; color: #7A7570; margin-bottom: 2px; }
+.inv-card-success .amount-big { font-size: 32px; font-weight: 700; letter-spacing: -.04em; color: #110D10; font-variant-numeric: tabular-nums; margin-top: 12px; line-height: 1; }
+.inv-card-success .amount-big .ccy { font-size: 14px; font-weight: 400; color: #7A7570; margin-left: 6px; }
+.inv-card-success .due { font-size: 12px; color: #7A7570; margin-top: 6px; }
+.share-row { display: flex; gap: 8px; margin-top: 14px; border-top: 1px solid rgba(17,13,16,.06); padding-top: 14px; }
+/* .share-btn → .btn.outline.sm */
 .anaf-card { background: #fff; border: 1px solid rgba(17,13,16,.12); border-radius: 14px; overflow: hidden; margin-bottom: 10px; }
 .anaf-top { padding: 14px 16px 10px; border-bottom: 1px solid rgba(17,13,16,.06); }
 .anaf-timer-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
 .anaf-label { font-size: 12px; color: #7A7570; }
 .anaf-timer { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
 .anaf-body { padding: 12px 16px; }
-.anaf-info { font-size: 13px; color: #7A7570; line-height: 1.55; margin-bottom: 12px; }
+.anaf-info { font-size: 14px; color: #7A7570; line-height: 1.55; margin-bottom: 12px; }
 .anaf-actions { display: flex; gap: 8px; }
-.anaf-btn {
-  flex: 1; height: 40px; border-radius: 999px;
-  border: 1px solid rgba(17,13,16,.12); background: #fff;
-  font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 6px;
-}
-.anaf-btn:active { background: #EFEBE4; }
-.anaf-btn.primary { background: #FDE7F0; border-color: rgba(238,67,121,.2); color: #C9255B; font-weight: 600; }
+/* .anaf-btn → .btn.outline.sm / .btn.outline-pink.sm */
 .info-card { background: #fff; border: 1px solid rgba(17,13,16,.12); border-radius: 14px; overflow: hidden; margin-bottom: 10px; }
 .info-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 14px; border-bottom: 1px solid rgba(17,13,16,.06); }
 .info-row:last-child { border-bottom: none; }
 .info-label { font-size: 12px; color: #7A7570; }
-.info-value { font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.info-value { font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; }
 
 /* ── Bottom sheet ── */
 .sheet-bg { position: fixed; inset: 0; z-index: 100; background: rgba(17,13,16,.38); display: none; align-items: flex-end; }
@@ -349,9 +321,9 @@ input, textarea { font-family: inherit; }
 @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: none; opacity: 1; } }
 .sheet-handle { width: 36px; height: 4px; border-radius: 999px; background: rgba(17,13,16,.12); margin: 0 auto 20px; }
 .sheet-title { font-size: 18px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 4px; }
-.sheet-sub { font-size: 13px; color: #7A7570; line-height: 1.5; margin-bottom: 20px; }
+.sheet-sub { font-size: 12px; color: #7A7570; line-height: 1.5; margin-bottom: 20px; }
 .sheet-tabs { display: flex; padding: 3px; background: #EFEBE4; border-radius: 999px; margin-bottom: 20px; }
-.sheet-tabs button { flex: 1; border: none; background: transparent; font-size: 13px; font-weight: 500; padding: 8px 12px; border-radius: 999px; color: #7A7570; transition: all .14s; }
+.sheet-tabs button { flex: 1; border: none; background: transparent; font-size: 12px; font-weight: 500; padding: 8px 12px; border-radius: 999px; color: #7A7570; transition: all .14s; }
 .sheet-tabs button.active { background: #fff; color: #110D10; box-shadow: 0 1px 2px rgba(0,0,0,.07); }
 .field { display: flex; flex-direction: column; margin-bottom: 14px; }
 .field-label { font-size: 12px; font-weight: 500; color: #7A7570; letter-spacing: 0.04em; padding-left: 16px; margin-bottom: 4px; }
@@ -362,8 +334,12 @@ input, textarea { font-family: inherit; }
   font-size: 14px; color: #110D10; outline: none; transition: border-color .14s, box-shadow .14s;
 }
 .field-input::placeholder { color: #ABA59E; }
-.field-input:focus { border-color: #EE4379; box-shadow: 0 0 0 3px rgba(238,67,121,.12); }
+.field-input:focus { border-color: #7A7570; box-shadow: 0 0 0 3px rgba(17,13,16,.08); }
 .field-input.readonly { background: #EFEBE4; color: #ABA59E; pointer-events: none; cursor: not-allowed; }
+.field-wrap { position: relative; display: flex; align-items: center; }
+.field-wrap .field-input { padding-right: 44px; }
+.field-wrap-suffix { position: absolute; right: 16px; font-size: 14px; color: #7A7570; pointer-events: none; }
+.field-wrap-icon { position: absolute; right: 14px; color: #7A7570; pointer-events: none; }
 .field-textarea {
   width: 100%; min-height: 90px; padding: 12px 16px;
   background: #fff; border: 1px solid rgba(17,13,16,.12); border-radius: 14px;
@@ -371,7 +347,7 @@ input, textarea { font-family: inherit; }
   transition: border-color .14s, box-shadow .14s;
 }
 .field-textarea::placeholder { color: #ABA59E; }
-.field-textarea:focus { border-color: #EE4379; box-shadow: 0 0 0 3px rgba(238,67,121,.12); }
+.field-textarea:focus { border-color: #7A7570; box-shadow: 0 0 0 3px rgba(17,13,16,.08); }
 /* IBAN list */
 .iban-list { background: #fff; border: 1px solid rgba(17,13,16,.12); border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
 .iban-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid rgba(17,13,16,.06); cursor: pointer; }
@@ -380,7 +356,7 @@ input, textarea { font-family: inherit; }
 .iban-check.on { background: #EE4379; border-color: #EE4379; }
 .iban-num { font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; margin-bottom: 2px; }
 .iban-bank { font-size: 11px; color: #7A7570; }
-.add-iban { font-size: 13px; color: #EE4379; font-weight: 500; cursor: pointer; padding: 4px 0; display: inline-block; }
+.add-iban { font-size: 14px; color: #EE4379; font-weight: 500; cursor: pointer; padding: 4px 0; display: inline-block; }
 
 /* ── Confirm overlay ── */
 .confirm-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(17,13,16,.45); display: none; align-items: flex-end; }
@@ -390,6 +366,9 @@ input, textarea { font-family: inherit; }
 .confirm-title { font-size: 18px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 8px; }
 .confirm-text { font-size: 14px; color: #7A7570; line-height: 1.6; margin-bottom: 22px; }
 .confirm-text strong { color: #110D10; }
+
+/* ── Decimal style token (num-dec) ── */
+.num-dec { font-size: 0.72em; letter-spacing: 0; }
 </style>
 </head>
 <body>
@@ -404,9 +383,12 @@ input, textarea { font-family: inherit; }
     </div>
   </div>
   <div class="topbar">
-    <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 7h8M7 3v8"/></svg></div>
     <div style="flex:1"><div class="tb-title">Facturi emise</div></div>
-    <span class="tb-meta">Mai 2026</span>
+    <button class="btn outline icon-only" onclick="return false">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M2 4h12M2 8h12M2 12h12"/>
+      </svg>
+    </button>
   </div>
   <div class="sbody">
     <div class="search-wrap">
@@ -415,60 +397,45 @@ input, textarea { font-family: inherit; }
     </div>
     <div class="eyebrow"><span class="dot"></span>Recente</div>
     <div class="inv-list" id="invoice-list">
-      <div class="inv-item"><div class="inv-icon">VT</div><div class="inv-info"><div class="inv-name">VLM PROFESSIONAL TRANS SRL</div><div class="inv-meta"><span class="badge badge-draft">Draft</span><span>RO1234567</span><span>·</span><span>20 Feb</span></div></div><div class="inv-right"><div class="inv-amount">9.300,00 LEI</div></div></div>
-      <div class="inv-item"><div class="inv-icon">T5</div><div class="inv-info"><div class="inv-name">TASTE 5 SRL</div><div class="inv-meta"><span class="badge badge-draft">Draft</span><span>RO1234568</span><span>·</span><span>18 Feb</span></div></div><div class="inv-right"><div class="inv-amount">9.300,00 EUR</div></div></div>
-      <div class="inv-item"><div class="inv-icon">FI</div><div class="inv-info"><div class="inv-name">FLAVOR INC</div><div class="inv-meta"><span class="badge badge-ok">Trimisă</span><span>RO1234569</span><span>·</span><span>15 Feb</span></div></div><div class="inv-right"><div class="inv-amount">155.300,00 EUR</div></div></div>
-      <div class="inv-item"><div class="inv-icon">DC</div><div class="inv-info"><div class="inv-name">DELICIOUS CO SRL</div><div class="inv-meta"><span class="badge badge-draft">Draft</span><span>RO1234570</span><span>·</span><span>10 Feb</span></div></div><div class="inv-right"><div class="inv-amount">7.200,00 LEI</div></div></div>
-      <div class="inv-item"><div class="inv-icon">SA</div><div class="inv-info"><div class="inv-name">SAVOR AND PARTNERS IMPEX SRL</div><div class="inv-meta"><span class="badge badge-ok">Trimisă</span><span>RO1234571</span><span>·</span><span>5 Feb</span></div></div><div class="inv-right"><div class="inv-amount">71.180,50 LEI</div></div></div>
-      <div class="inv-item"><div class="inv-icon">GL</div><div class="inv-info"><div class="inv-name">GOURMET LTD</div><div class="inv-meta"><span class="badge badge-due">Scadentă</span><span>RO1234572</span><span>·</span><span>1 Feb</span></div></div><div class="inv-right"><div class="inv-amount">15.700,00 LEI</div></div></div>
+      <div class="inv-item"><div class="inv-icon">VT</div><div class="inv-info"><div class="inv-name">VLM PROFESSIONAL TRANS SRL</div><div class="inv-meta"><span>20 Feb</span><span class="inv-amount">9.300<span class="num-dec">,00</span> Lei</span></div></div></div>
+      <div class="inv-item"><div class="inv-icon">T5</div><div class="inv-info"><div class="inv-name">TASTE 5 SRL</div><div class="inv-meta"><span>18 Feb</span><span class="inv-amount">9.300<span class="num-dec">,00</span> EUR</span></div></div></div>
+      <div class="inv-item"><div class="inv-icon">FI</div><div class="inv-info"><div class="inv-name">FLAVOR INC</div><div class="inv-meta"><span>15 Feb</span><span class="inv-amount">155.300<span class="num-dec">,00</span> EUR</span></div></div></div>
+      <div class="inv-item"><div class="inv-icon">DC</div><div class="inv-info"><div class="inv-name">DELICIOUS CO SRL</div><div class="inv-meta"><span>10 Feb</span><span class="inv-amount">7.200<span class="num-dec">,00</span> Lei</span></div></div></div>
+      <div class="inv-item"><div class="inv-icon">SA</div><div class="inv-info"><div class="inv-name">SAVOR AND PARTNERS IMPEX SRL</div><div class="inv-meta"><span>5 Feb</span><span class="inv-amount">71.180<span class="num-dec">,50</span> Lei</span></div></div></div>
+      <div class="inv-item"><div class="inv-icon">GL</div><div class="inv-info"><div class="inv-name">GOURMET LTD</div><div class="inv-meta"><span>1 Feb</span><span class="inv-amount">15.700<span class="num-dec">,00</span> Lei</span></div></div></div>
     </div>
   </div>
-  <!-- FAB -->
-  <button class="new-invoice-btn" onclick="goTo('s-company')">
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg>
-    Factură nouă
-  </button>
-  <!-- Bottom nav -->
-  <nav class="bottom-nav">
-    <a href="#" onclick="return false">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="5.5" height="5.5" rx="1.5"/><rect x="11.5" y="3" width="5.5" height="5.5" rx="1.5"/><rect x="3" y="11.5" width="5.5" height="5.5" rx="1.5"/><rect x="11.5" y="11.5" width="5.5" height="5.5" rx="1.5"/></svg>
-      Dashboard
-    </a>
-    <a href="#" onclick="return false" class="active">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 3h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/><path d="M7 7h6M7 10h4M7 13h3"/></svg>
-      Facturi
-    </a>
-    <a href="#" onclick="return false">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="8" r="4"/><path d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>
-      Cont
-    </a>
-  </nav>
+  <div class="bottom-cta">
+    <button class="btn-primary" onclick="goTo('s-company')">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg>
+      Factură nouă
+    </button>
+  </div>
 </div>
 
 <!-- ── S2: Client (Step 1) ── -->
 <div class="screen" id="s-company">
   <div class="sbar"><span class="sbar-time">9:41</span><div class="sbar-icons"><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/></svg></div></div>
   <div class="topbar">
-    <button class="back-btn" onclick="goTo('s-list')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4l-5 4 5 4"/></svg></button>
-    <div style="flex:1"><div class="tb-title">Factură nouă</div></div>
+    <button class="btn outline icon-only" onclick="goTo('s-list')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4l-5 4 5 4"/></svg></button>
+    <div style="flex:1"><div class="tb-title">Către cine emiți factura?</div></div>
     <button class="close-btn" onclick="goTo('s-list')">Închide</button>
   </div>
   <div class="step-bar"><div class="step-pill active"></div><div class="step-pill upcoming"></div><div class="step-pill upcoming"></div></div>
   <div class="sbody">
-    <div style="padding:16px 0 4px;font-size:22px;font-weight:700;letter-spacing:-.025em;line-height:1.2">Către cine emiți <em style="font-family:'Fraunces',serif;font-style:italic;color:#EE4379;font-weight:500">factura?</em></div>
     <div class="search-wrap">
       <svg class="search-ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
       <input type="text" placeholder="Caută după denumire sau CUI" oninput="filterCompanies(this.value)">
-    </div>
-    <div class="alert-banner" onclick="openSheet('sheet-foreign')">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#C9255B" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v4M8 11h.01"/></svg>
-      <div class="alert-banner-text"><strong>Persoană fizică sau firmă din afara României?</strong> Apasă aici pentru a adăuga</div>
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#C9255B" stroke-width="1.6" stroke-linecap="round"><path d="M5 3l4 4-4 4"/></svg>
     </div>
     <div class="eyebrow" id="lbl-recent"><span class="dot"></span>Clienții tăi</div>
     <div id="co-recent">
       <div class="co-item" onclick="selectCo('DAMART DESIGN CONSTRUCT SRL','RO3210987','DD')"><div class="co-avatar">DD</div><div class="co-info"><div class="co-name">DAMART DESIGN CONSTRUCT SRL</div><div class="co-sub">RO3210987 · 20 facturi emise</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".3"><path d="M5 3l4 4-4 4"/></svg></div>
       <div class="co-item" onclick="selectCo('ECOFLEX GROUP SRL','RO3210988','EG')"><div class="co-avatar">EG</div><div class="co-info"><div class="co-name">ECOFLEX GROUP SRL</div><div class="co-sub">RO3210988 · 20 facturi emise</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".3"><path d="M5 3l4 4-4 4"/></svg></div>
+    </div>
+    <div class="alert-banner neutral" onclick="openSheet('sheet-foreign')">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#7A7570" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v4M8 11h.01"/></svg>
+      <div class="alert-banner-text"><strong>Persoană fizică sau firmă din afara României?</strong></div>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#7A7570" stroke-width="1.6" stroke-linecap="round"><path d="M5 3l4 4-4 4"/></svg>
     </div>
     <div class="eyebrow" id="lbl-other"><span class="dot"></span>Alte companii din România</div>
     <div id="co-other">
@@ -486,40 +453,43 @@ input, textarea { font-family: inherit; }
 <div class="screen" id="s-amount">
   <div class="sbar"><span class="sbar-time">9:41</span><div class="sbar-icons"><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/></svg></div></div>
   <div class="topbar">
-    <button class="back-btn" onclick="goTo('s-company')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4l-5 4 5 4"/></svg></button>
+    <button class="btn outline icon-only" onclick="goTo('s-company')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4l-5 4 5 4"/></svg></button>
     <div style="flex:1"><div class="tb-title" id="amt-co-name">–</div><div class="tb-sub" id="amt-co-cui">–</div></div>
     <button class="close-btn" onclick="goTo('s-list')">Închide</button>
   </div>
   <div class="step-bar"><div class="step-pill done"></div><div class="step-pill active"></div><div class="step-pill upcoming"></div></div>
   <div class="amount-screen">
     <div class="currency-tabs" id="ccy-tabs">
-      <button class="active" onclick="setCcy(this,'LEI','')">LEI</button>
-      <button onclick="setCcy(this,'EUR','€')">EUR</button>
-      <button onclick="setCcy(this,'USD','$')">USD</button>
-      <button onclick="setCcy(this,'GBP','£')">GBP</button>
+      <button class="active" onclick="setCcy(this,'Lei','')">Lei</button>
+      <button onclick="setCcy(this,'EUR','')">EUR</button>
+      <button onclick="setCcy(this,'USD','')">USD</button>
+      <button onclick="setCcy(this,'GBP','')">GBP</button>
     </div>
     <div class="amount-display-row">
       <span class="amount-symbol" id="amt-sym"></span>
-      <div class="amount-number" id="amt-display">0</div>
-      <span class="amount-ccy" id="amt-ccy-lbl">LEI</span>
+      <input class="amount-input" id="amt-input" type="text" inputmode="decimal" placeholder="0" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="onAmtInput(this)">
+      <span class="amount-ccy" id="amt-ccy-lbl">Lei</span>
     </div>
     <div class="amount-hint" id="amt-hint">Introdu suma fără TVA</div>
     <div class="tva-toggle-row" onclick="toggleTva()">
-      <span class="label">Include TVA (19%)</span>
       <button class="toggle-sw" id="tva-sw"></button>
+      <span class="label">Include TVA (19%)</span>
     </div>
     <div style="font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#7A7570;display:flex;align-items:center;gap:6px;margin-bottom:10px;width:100%;max-width:320px">
       <span style="width:4px;height:4px;border-radius:50%;background:#EE4379;flex-shrink:0"></span>Ultimele sume facturate
     </div>
     <div class="chips-row">
-      <div class="chip" onclick="setChip('500')">500</div>
-      <div class="chip" onclick="setChip('5400')">5.400</div>
-      <div class="chip" onclick="setChip('18500')">18.500</div>
-      <div class="chip" onclick="setChip('600')">600</div>
-      <div class="chip" onclick="setChip('6480')">6.480</div>
-      <div class="chip" onclick="setChip('380')">380</div>
-      <div class="chip" onclick="setChip('1480')">1.480</div>
+      <button class="chip" onclick="setChip('500')">500</button>
+      <button class="chip" onclick="setChip('5400')">5.400</button>
+      <button class="chip" onclick="setChip('18500')">18.500</button>
+      <button class="chip" onclick="setChip('600')">600</button>
+      <button class="chip" onclick="setChip('6480')">6.480</button>
+      <button class="chip" onclick="setChip('380')">380</button>
+      <button class="chip" onclick="setChip('1480')">1.480</button>
     </div>
+  </div>
+  <div class="bottom-cta">
+    <button class="btn-primary" id="amt-btn" onclick="goToSummary()" disabled>Continuă</button>
   </div>
 </div>
 
@@ -527,38 +497,39 @@ input, textarea { font-family: inherit; }
 <div class="screen" id="s-summary">
   <div class="sbar"><span class="sbar-time">9:41</span><div class="sbar-icons"><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/></svg></div></div>
   <div class="topbar">
-    <button class="back-btn" onclick="goTo('s-amount')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4l-5 4 5 4"/></svg></button>
+    <button class="btn outline icon-only" onclick="goTo('s-amount')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4l-5 4 5 4"/></svg></button>
     <div style="flex:1"><div class="tb-title">Sumar factură</div><div class="tb-sub" id="sum-sub">–</div></div>
   </div>
   <div class="step-bar"><div class="step-pill done"></div><div class="step-pill done"></div><div class="step-pill active"></div></div>
   <div class="sbody">
-    <div style="padding:12px 0 14px;font-size:13px;color:#7A7570;line-height:1.55">Revizuiește detaliile facturii. Apasă pe orice câmp pentru a-l modifica.</div>
+    <div style="padding:12px 0 14px;font-size:14px;color:#7A7570;line-height:1.55">Revizuiește detaliile facturii. Apasă pe orice câmp pentru a-l modifica.</div>
     <!-- Client -->
     <div class="detail-card">
       <div class="card-header"><span class="card-label"><span class="dot"></span>Client</span><button class="card-action" onclick="goTo('s-company')">Schimbă</button></div>
-      <div class="detail-row"><span class="detail-label">Denumire</span><span class="detail-value" id="sum-co">–</span></div>
-      <div class="detail-row"><span class="detail-label">CUI</span><span class="detail-value" id="sum-cui">–</span></div>
+      <div class="detail-row tappable" onclick="goTo('s-company')"><span class="detail-label">Denumire</span><span class="detail-value" id="sum-co">–</span></div>
+      <div class="detail-row tappable" onclick="goTo('s-company')"><span class="detail-label">CUI</span><span class="detail-value" id="sum-cui">–</span></div>
     </div>
     <!-- Date factură -->
     <div class="detail-card">
       <div class="card-header"><span class="card-label"><span class="dot"></span>Date factură</span></div>
-      <div class="detail-row"><span class="detail-label">Data emiterii</span><span class="detail-value">07 mai 2026</span></div>
-      <div class="detail-row"><span class="detail-label">Scadență (30 zile)</span><span class="detail-value">06 iun 2026</span></div>
+      <div class="detail-row tappable" onclick="openSheet('sheet-date')"><span class="detail-label">Data emiterii</span><span class="detail-value" id="sum-emitere">07 mai 2026</span></div>
+      <div class="detail-row tappable" onclick="openSheet('sheet-date')"><span class="detail-label" id="sum-scadenta-label">Scadență (30 zile)</span><span class="detail-value" id="sum-scadenta">06 iun 2026</span></div>
       <div class="detail-row"><span class="detail-label">Nr. factură</span><span class="detail-value" style="font-size:12px;letter-spacing:.01em">DF-8-BONO-4334/26</span></div>
     </div>
     <!-- Financiar -->
     <div class="detail-card">
       <div class="card-header"><span class="card-label"><span class="dot"></span>Financiar</span><button class="card-action" onclick="openSheet('sheet-iban')">Modifică IBAN-uri</button></div>
       <div class="detail-row tappable" onclick="goTo('s-amount')">
-        <span class="detail-label">Sumă</span>
-        <div style="text-align:right"><div class="detail-value large" id="sum-amt">–</div><div class="modify-hint">Modifică</div></div>
+        <span class="detail-label">Sumă facturată</span>
+        <div style="text-align:right">
+          <div style="display:flex;align-items:baseline;justify-content:flex-end;gap:5px;white-space:nowrap">
+            <span class="detail-value large" id="sum-amt">–</span>
+            <span class="detail-value" id="sum-ccy" style="font-size:12px;font-weight:500;color:#7A7570">Lei</span>
+          </div>
+        </div>
       </div>
-      <div class="detail-row tappable" onclick="goTo('s-amount')">
-        <span class="detail-label">Monedă</span>
-        <div style="text-align:right"><div class="detail-value" id="sum-ccy">LEI</div><div class="modify-hint">Modifică</div></div>
-      </div>
-      <div class="detail-row"><span class="detail-label">IBAN 1</span><span class="detail-value iban" id="iban-1">RO49AAAA1B31000000123945</span></div>
-      <div class="detail-row"><span class="detail-label">IBAN 2</span><span class="detail-value iban" id="iban-2">RO41REVO0000103977331234</span></div>
+      <div class="detail-row tappable" onclick="openSheet('sheet-iban')"><span class="detail-label">IBAN 1</span><span class="detail-value iban" id="iban-1">RO49AAAA1B31000000123945</span></div>
+      <div class="detail-row tappable" onclick="openSheet('sheet-iban')"><span class="detail-label">IBAN 2</span><span class="detail-value iban" id="iban-2">RO41REVO0000103977331234</span></div>
     </div>
     <!-- Conținut -->
     <div class="detail-card">
@@ -585,16 +556,16 @@ input, textarea { font-family: inherit; }
       <div style="font-size:21px;font-weight:700;letter-spacing:-.025em;margin-bottom:6px">Factura a fost emisă cu succes</div>
       <div style="font-size:14px;color:#7A7570;line-height:1.55">Urmează să fie trimisă în eFactura (ANAF).</div>
     </div>
-    <div class="inv-card-dark">
+    <div class="inv-card-success">
       <div class="tag">Factură emisă</div>
       <div class="number">DF-8-BONO-4334/26</div>
       <div class="company" id="suc-co">–</div>
-      <div class="amount-big" id="suc-amt">–<span class="ccy" id="suc-ccy">LEI</span></div>
+      <div class="amount-big"><span id="suc-amt">–</span><span class="ccy" id="suc-ccy"> Lei</span></div>
       <div class="due">Scadentă: 06 iun 2026</div>
       <div class="share-row">
-        <button class="share-btn"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6.5 1v8M4 4l2.5-3 2.5 3M2 10h9"/></svg>Email</button>
-        <button class="share-btn"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 11l1.5-4L10 2.5l-2 7-3-1.5L4 12z"/></svg>WhatsApp</button>
-        <button class="share-btn"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 10.5h9M6.5 2v7M4 6l2.5 3.5L9 6"/></svg>PDF</button>
+        <button class="btn outline sm" style="flex:1"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6.5 1v8M4 4l2.5-3 2.5 3M2 10h9"/></svg>Email</button>
+        <button class="btn outline sm" style="flex:1"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 11l1.5-4L10 2.5l-2 7-3-1.5L4 12z"/></svg>WhatsApp</button>
+        <button class="btn outline sm" style="flex:1"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 10.5h9M6.5 2v7M4 6l2.5 3.5L9 6"/></svg>PDF</button>
       </div>
     </div>
     <div class="anaf-card">
@@ -605,8 +576,8 @@ input, textarea { font-family: inherit; }
       <div class="anaf-body">
         <div class="anaf-info">Până atunci, mai poți modifica factura. <strong style="color:#110D10">După ce factura va fi trimisă la ANAF, aceasta nu va mai putea fi modificată.</strong></div>
         <div class="anaf-actions">
-          <button class="anaf-btn" onclick="goTo('s-summary')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 7h8M7 4l3 3-3 3"/></svg>Modifică factura</button>
-          <button class="anaf-btn primary" onclick="openConfirm()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 7l4 4 6-6"/></svg>Trimite acum</button>
+          <button class="btn outline sm" onclick="goTo('s-summary')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 7h8M7 4l3 3-3 3"/></svg>Modifică factura</button>
+          <button class="btn outline-pink sm" onclick="openConfirm()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 7l4 4 6-6"/></svg>Trimite acum</button>
         </div>
       </div>
     </div>
@@ -616,7 +587,7 @@ input, textarea { font-family: inherit; }
       <div class="info-row"><span class="info-label">Client</span><span class="info-value" id="suc-info-co">–</span></div>
       <div class="info-row"><span class="info-label">Sumă facturată</span><span class="info-value" id="suc-info-amt">–</span></div>
       <div class="info-row"><span class="info-label">Scadență</span><span class="info-value">06 iun 2026</span></div>
-      <div class="info-row"><span class="info-label">Status ANAF</span><span class="info-value"><span id="anaf-badge" class="badge badge-due">În așteptare</span></span></div>
+      <div class="info-row"><span class="info-label">Status ANAF</span><span class="info-value"><span id="anaf-badge" class="badge warn">În așteptare</span></span></div>
     </div>
   </div>
   <div class="bottom-cta"><button class="btn-primary btn-tonal" onclick="goTo('s-list')">Înapoi la facturi</button></div>
@@ -649,8 +620,8 @@ input, textarea { font-family: inherit; }
       <div class="field"><div class="field-label">Adresă</div><input class="field-input" type="text" placeholder="Adaugă adresa" id="firma-adr"></div>
     </div>
     <div style="margin-top:8px">
-      <button class="btn-primary" style="width:100%;height:52px;border-radius:999px;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 6px 16px rgba(238,67,121,.3)" onclick="addClient()">Adaugă client</button>
-      <button class="btn-primary btn-ghost" style="width:100%;height:40px;margin-top:2px;border-radius:999px;font-size:14px;font-weight:500;display:flex;align-items:center;justify-content:center;box-shadow:none" onclick="closeSheet('sheet-foreign')">Anulează</button>
+      <button class="btn primary full" onclick="addClient()">Adaugă client</button>
+      <button class="btn outline full" style="margin-top:4px" onclick="closeSheet('sheet-foreign')">Anulează</button>
     </div>
   </div>
 </div>
@@ -664,8 +635,8 @@ input, textarea { font-family: inherit; }
     <div class="field"><div class="field-label">Descriere</div><textarea class="field-textarea" id="edit-desc" placeholder="Poți menționa aici echivalentul în EUR și cursul valutar utilizat.">Servicii conform contract</textarea></div>
     <div class="field"><div class="field-label">Mențiuni</div><textarea class="field-textarea" id="edit-ment">Factura circulă fara alte detalii</textarea></div>
     <div style="margin-top:8px">
-      <button class="btn-primary" style="width:100%;height:52px;border-radius:999px;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(238,67,121,.3)" onclick="saveContent()">Salvează</button>
-      <button class="btn-primary btn-ghost" style="width:100%;height:40px;margin-top:2px;border-radius:999px;font-size:14px;font-weight:500;display:flex;align-items:center;justify-content:center;box-shadow:none" onclick="closeSheet('sheet-content')">Anulează</button>
+      <button class="btn primary full" onclick="saveContent()">Salvează</button>
+      <button class="btn outline full" style="margin-top:4px" onclick="closeSheet('sheet-content')">Anulează</button>
     </div>
   </div>
 </div>
@@ -692,8 +663,38 @@ input, textarea { font-family: inherit; }
       <div class="add-iban">+ Adaugă un alt IBAN</div>
     </div>
     <div style="margin-top:8px">
-      <button class="btn-primary" style="width:100%;height:52px;border-radius:999px;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(238,67,121,.3)" onclick="saveIban()">Salvează</button>
-      <button class="btn-primary btn-ghost" style="width:100%;height:40px;margin-top:2px;border-radius:999px;font-size:14px;font-weight:500;display:flex;align-items:center;justify-content:center;box-shadow:none" onclick="closeSheet('sheet-iban')">Anulează</button>
+      <button class="btn primary full" onclick="saveIban()">Salvează</button>
+      <button class="btn outline full" style="margin-top:4px" onclick="closeSheet('sheet-iban')">Anulează</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Sheet: Modifică date factură ── -->
+<div class="sheet-bg" id="sheet-date" onclick="if(event.target===this)closeSheet('sheet-date')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Modifică detalii</div>
+    <div class="field">
+      <div class="field-label">Data emitere</div>
+      <div class="field-wrap">
+        <input class="field-input" type="date" id="date-emitere" oninput="computeDueDate()">
+        <svg class="field-wrap-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M5 1v4M11 1v4M2 7h12"/></svg>
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">Scadență</div>
+      <div class="field-wrap">
+        <input class="field-input" type="number" id="date-zile" value="30" min="1" max="365" oninput="computeDueDate()">
+        <span class="field-wrap-suffix">zile</span>
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">Data scadență</div>
+      <input class="field-input readonly" type="text" id="date-scadenta" readonly>
+    </div>
+    <div style="margin-top:8px">
+      <button class="btn primary full" onclick="saveDateSheet()">Salvează</button>
+      <button class="btn outline full" style="margin-top:4px" onclick="closeSheet('sheet-date')">Anulează</button>
     </div>
   </div>
 </div>
@@ -704,70 +705,64 @@ input, textarea { font-family: inherit; }
     <div class="confirm-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.3 3.6L2.8 17A1.9 1.9 0 004.5 20h15a1.9 1.9 0 001.7-3L13.7 3.6a1.9 1.9 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
     <div class="confirm-title">Trimiți acum la ANAF?</div>
     <div class="confirm-text">Ești sigur că vrei să trimiți acum factura la ANAF? <strong>După ce factura ajunge la ANAF, ea nu mai poate fi modificată</strong> (dar poate fi anulată și emisă din nou).</div>
-    <button class="btn-primary btn-warn" style="width:100%;height:52px;border-radius:999px;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px" onclick="confirmAnaf()">Da, trimite la ANAF</button>
-    <button class="btn-primary btn-ghost" style="width:100%;height:40px;margin-top:2px;border-radius:999px;font-size:14px;font-weight:500;display:flex;align-items:center;justify-content:center;box-shadow:none" onclick="closeConfirm()">Nu acum</button>
+    <button class="btn danger full lg" onclick="confirmAnaf()">Da, trimite la ANAF</button>
+    <button class="btn outline full" style="margin-top:4px" onclick="closeConfirm()">Nu acum</button>
   </div>
 </div>
 
-<!-- ── System keyboard (fixed, shown only on s-amount) ── -->
-<div class="kbd-toolbar" id="kbd-toolbar">
-  <button class="btn-primary" id="amt-btn" onclick="goToSummary()" disabled>Continuă</button>
-</div>
-<div class="sys-keyboard" id="sys-keyboard">
-  <div class="sys-kbd-row">
-    <button class="sys-key" onclick="ni('1')">1</button>
-    <button class="sys-key" onclick="ni('2')">2</button>
-    <button class="sys-key" onclick="ni('3')">3</button>
-  </div>
-  <div class="sys-kbd-row">
-    <button class="sys-key" onclick="ni('4')">4</button>
-    <button class="sys-key" onclick="ni('5')">5</button>
-    <button class="sys-key" onclick="ni('6')">6</button>
-  </div>
-  <div class="sys-kbd-row">
-    <button class="sys-key" onclick="ni('7')">7</button>
-    <button class="sys-key" onclick="ni('8')">8</button>
-    <button class="sys-key" onclick="ni('9')">9</button>
-  </div>
-  <div class="sys-kbd-row">
-    <button class="sys-key" onclick="ni(',')"><span style="font-size:17px;line-height:1">,</span></button>
-    <button class="sys-key" onclick="ni('0')">0</button>
-    <button class="sys-key sys-del" onclick="nd()">
-      <svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 8H8M8 8l4-4M8 8l4 4"/><path d="M2 3h5L2 8l5 5H2"/></svg>
-    </button>
-  </div>
 </div>
 
 <script>
-const S={co:{name:'',cui:'',initials:''},ccy:{code:'LEI',symbol:''},raw:'',tva:false,desc:'Servicii conform contract',ment:'Factura circulă fara alte detalii',tab:'pf'};
-function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));const el=document.getElementById(id);if(el){el.classList.add('active');const sb=el.querySelector('.sbody');if(sb)sb.scrollTop=0;}const showKbd=id==='s-amount';const kbd=document.getElementById('sys-keyboard');const tb=document.getElementById('kbd-toolbar');if(kbd)kbd.style.display=showKbd?'block':'none';if(tb)tb.style.display=showKbd?'block':'none';updateKbdLayout();}
-function updateKbdLayout(){const kbd=document.getElementById('sys-keyboard');const tb=document.getElementById('kbd-toolbar');if(!kbd||kbd.style.display==='none')return;const kh=kbd.offsetHeight;const tbh=tb?tb.offsetHeight:0;if(tb)tb.style.bottom=kh+'px';const amtScreen=document.getElementById('s-amount');if(amtScreen){const as=amtScreen.querySelector('.amount-screen');if(as)as.style.paddingBottom=(kh+tbh+8)+'px';}}
+const S={co:{name:'',cui:'',initials:''},ccy:{code:'Lei',symbol:''},raw:'',tva:false,desc:'Servicii conform contract',ment:'Factura circulă fara alte detalii',tab:'pf'};
+function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));const el=document.getElementById(id);if(el){el.classList.add('active');const sb=el.querySelector('.sbody');if(sb)sb.scrollTop=0;}}
 function filterInvoices(q){q=q.toLowerCase();document.querySelectorAll('#invoice-list .inv-item').forEach(i=>{i.style.display=i.querySelector('.inv-name').textContent.toLowerCase().includes(q)?'':'none'});}
 function selectCo(name,cui,initials){S.co={name,cui,initials};document.getElementById('amt-co-name').textContent=name;document.getElementById('amt-co-cui').textContent=cui;goTo('s-amount');}
 function filterCompanies(q){q=(q||'').toLowerCase().trim();const r=document.getElementById('co-recent'),rl=document.getElementById('lbl-recent'),ol=document.getElementById('lbl-other');if(!q){r.style.display='';rl.style.display='';ol.style.display='';document.querySelectorAll('#co-other .co-item').forEach(i=>i.style.display='');return;}r.style.display='none';rl.style.display='none';ol.style.display='';document.querySelectorAll('#co-other .co-item').forEach(i=>{i.style.display=i.querySelector('.co-name').textContent.toLowerCase().includes(q)?'':'none';});}
 function switchTab(tab){S.tab=tab;document.getElementById('tab-pf').style.display=tab==='pf'?'':'none';document.getElementById('tab-firma').style.display=tab==='firma'?'':'none';document.getElementById('tab-pf-btn').classList.toggle('active',tab==='pf');document.getElementById('tab-firma-btn').classList.toggle('active',tab==='firma');}
 function addClient(){let name,cui,initials;if(S.tab==='pf'){const p=document.getElementById('pf-p').value.trim(),n=document.getElementById('pf-n').value.trim();if(!p&&!n){closeSheet('sheet-foreign');return;}name=((p+' '+n).trim()).toUpperCase()||'CLIENT NOU';cui=document.getElementById('pf-c').value.trim()||'PF';initials=[p[0],n[0]].filter(Boolean).join('').toUpperCase()||'PF';}else{name=(document.getElementById('firma-n').value.trim()||'FIRMA EXTERNA').toUpperCase();cui=document.getElementById('firma-vies').value.trim()||document.getElementById('firma-cif').value.trim()||document.getElementById('firma-tara').value.trim()||'INT';initials=name.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase()||'FE';}closeSheet('sheet-foreign');selectCo(name,cui,initials);}
-function setCcy(btn,code,symbol){S.ccy={code,symbol};document.getElementById('amt-sym').textContent=symbol;document.getElementById('amt-ccy-lbl').textContent=code;document.querySelectorAll('#ccy-tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');updateAmt();}
+function setCcy(btn,code,symbol){S.ccy={code,symbol};document.getElementById('amt-sym').textContent=symbol;document.getElementById('amt-ccy-lbl').textContent=code;document.querySelectorAll('#ccy-tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');updateHint();}
 function toggleTva(){S.tva=!S.tva;document.getElementById('tva-sw').classList.toggle('on',S.tva);updateHint();}
-function ni(d){if(d===','){if(S.raw.includes(','))return;if(!S.raw)S.raw='0';S.raw+=',';}else{const p=S.raw.split(',');if(p.length>1&&p[1].length>=2)return;if(!S.raw&&d==='0')return;S.raw+=d;}updateAmt();updateHint();}
-function nd(){S.raw=S.raw.slice(0,-1);updateAmt();updateHint();}
-function setChip(r){S.raw=r;updateAmt();updateHint();}
-function fmt(r){if(!r)return'0';const p=r.split(','),i=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.');return p.length>1?i+','+p[1]:i;}
-function updateAmt(){const el=document.getElementById('amt-display'),btn=document.getElementById('amt-btn'),hv=S.raw&&S.raw!=='0';el.textContent=S.raw?fmt(S.raw):'0';el.className='amount-number'+(hv?' has-value':'');btn.disabled=!hv;}
-function updateHint(){const el=document.getElementById('amt-hint');if(S.tva&&S.raw){const b=parseFloat(S.raw.replace(/\./g,'').replace(',','.'))||0;el.textContent=`Total cu TVA 19%: ${(b*1.19).toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})} ${S.ccy.code}`;}else el.textContent='Introdu suma fără TVA';}
-function goToSummary(){document.getElementById('sum-co').textContent=S.co.name||'–';document.getElementById('sum-cui').textContent=S.co.cui||'–';document.getElementById('sum-sub').textContent=S.co.cui||'';document.getElementById('sum-amt').textContent=S.raw?fmt(S.raw):'–';document.getElementById('sum-ccy').textContent=S.ccy.code;document.getElementById('sum-desc').textContent=S.desc;document.getElementById('sum-ment').textContent=S.ment;goTo('s-summary');}
+function onAmtInput(el){let v=el.value.replace(/[^0-9,.]/g,'');const parts=v.split(',');if(parts.length>2)v=parts[0]+','+parts[1];if(parts[1]&&parts[1].length>2)v=parts[0]+','+parts[1].slice(0,2);el.value=v;S.raw=v;document.getElementById('amt-btn').disabled=!v||v==='0';updateHint();}
+function onAmtBlur(el){}
+function setChip(r){const el=document.getElementById('amt-input');el.value=r.replace(/[.]/g,'');S.raw=el.value;document.getElementById('amt-btn').disabled=false;updateHint();el.focus();}
+function fmt(r){if(!r)return'0';const p=r.replace(/[.]/g,'').split(','),i=p[0].replace(/(?<=\d)(?=(\d{3})+(?!\d))/g,'.');return p.length>1?i+','+p[1]:i;}
+function fmtHTML(r){if(!r)return'0';const p=r.replace(/[.]/g,'').split(','),i=p[0].replace(/(?<=\d)(?=(\d{3})+(?!\d))/g,'.');return p.length>1?i+'<span class="num-dec">,'+p[1]+'</span>':i;}
+function updateHint(){const el=document.getElementById('amt-hint');if(S.tva&&S.raw){const b=parseFloat(S.raw.replace(/[.]/g,'').replace(',','.'))||0;el.textContent='Total cu TVA 19%: '+(b*1.19).toLocaleString('ro-RO',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+S.ccy.code;}else el.textContent='Introdu suma fără TVA';}
+function goToSummary(){S.raw=document.getElementById('amt-input').value||'';document.getElementById('sum-co').textContent=S.co.name||'–';document.getElementById('sum-cui').textContent=S.co.cui||'–';document.getElementById('sum-sub').textContent=S.co.cui||'';document.getElementById('sum-amt').innerHTML=S.raw?fmtHTML(S.raw):'–';document.getElementById('sum-ccy').textContent=S.ccy.code;document.getElementById('sum-desc').textContent=S.desc;document.getElementById('sum-ment').textContent=S.ment;goTo('s-summary');}
 function saveContent(){const d=document.getElementById('edit-desc').value.trim(),m=document.getElementById('edit-ment').value.trim();S.desc=d||S.desc;S.ment=m||S.ment;document.getElementById('sum-desc').textContent=S.desc;document.getElementById('sum-ment').textContent=S.ment;closeSheet('sheet-content');}
 function toggleIban(row){const ck=row.querySelector('.iban-check'),on=ck.classList.contains('on');ck.classList.toggle('on',!on);ck.innerHTML=!on?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4l3 3 5-6"/></svg>':'';}
 function saveIban(){const rows=[...document.querySelectorAll('.iban-row')].filter(r=>r.querySelector('.iban-check.on'));if(rows[0])document.getElementById('iban-1').textContent=rows[0].querySelector('.iban-num').textContent;if(rows[1])document.getElementById('iban-2').textContent=rows[1].querySelector('.iban-num').textContent;closeSheet('sheet-iban');}
-function emiteFactura(){const btn=document.getElementById('emit-btn');btn.textContent='Se procesează...';btn.disabled=true;setTimeout(()=>{const a=S.raw?fmt(S.raw):'–';document.getElementById('suc-co').textContent=S.co.name||'–';document.getElementById('suc-amt').textContent=a;document.getElementById('suc-ccy').textContent=' '+S.ccy.code;document.getElementById('suc-info-co').textContent=S.co.name||'–';document.getElementById('suc-info-amt').textContent=a+' '+S.ccy.code;btn.innerHTML='<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8L6.5 11.5L13 4.5"/></svg> Emite factura';btn.disabled=false;startTimer();goTo('s-success');},800);}
+function emiteFactura(){const btn=document.getElementById('emit-btn');btn.textContent='Se procesează...';btn.disabled=true;setTimeout(()=>{const a=S.raw?fmt(S.raw):'–';const aHTML=S.raw?fmtHTML(S.raw):'–';document.getElementById('suc-co').textContent=S.co.name||'–';document.getElementById('suc-amt').innerHTML=aHTML;document.getElementById('suc-ccy').textContent=' '+S.ccy.code;document.getElementById('suc-info-co').textContent=S.co.name||'–';document.getElementById('suc-info-amt').innerHTML=aHTML+'<span style="font-size:.85em;font-weight:400;color:#7A7570"> '+S.ccy.code+'</span>';btn.innerHTML='<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8L6.5 11.5L13 4.5"/></svg> Emite factura';btn.disabled=false;startTimer();goTo('s-success');},800);}
 let ts=86340,ti=null;
 function startTimer(){clearInterval(ti);ts=86340;updT();ti=setInterval(()=>{ts>0?(ts--,updT()):clearInterval(ti)},1000);}
 function updT(){const h=String(Math.floor(ts/3600)).padStart(2,'0'),m=String(Math.floor(ts%3600/60)).padStart(2,'0'),s=String(ts%60).padStart(2,'0');document.getElementById('anaf-timer').textContent=`${h}:${m}:${s}`;}
 function openConfirm(){document.getElementById('confirm-anaf').classList.add('open');}
 function closeConfirm(){document.getElementById('confirm-anaf').classList.remove('open');}
-function confirmAnaf(){closeConfirm();clearInterval(ti);document.getElementById('anaf-timer').textContent='Trimis acum';document.getElementById('anaf-lbl').textContent='Status trimitere';const b=document.getElementById('anaf-badge');b.className='badge badge-ok';b.textContent='Trimisă la ANAF';const t=document.createElement('div');t.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1F7A4D;color:#fff;padding:10px 22px;border-radius:999px;font-size:13px;font-weight:600;z-index:300;box-shadow:0 4px 16px rgba(31,122,77,.25)';t.textContent='Trimis la ANAF';document.body.appendChild(t);setTimeout(()=>t.remove(),2500);}
-function openSheet(id){document.getElementById(id).classList.add('open');}
+function confirmAnaf(){closeConfirm();clearInterval(ti);document.getElementById('anaf-timer').textContent='Trimis acum';document.getElementById('anaf-lbl').textContent='Status trimitere';const b=document.getElementById('anaf-badge');b.className='badge success';b.textContent='Trimisă la ANAF';const t=document.createElement('div');t.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1F7A4D;color:#fff;padding:10px 22px;border-radius:999px;font-size:13px;font-weight:600;z-index:300;box-shadow:0 4px 16px rgba(31,122,77,.25)';t.textContent='Trimis la ANAF';document.body.appendChild(t);setTimeout(()=>t.remove(),2500);}
+function openSheet(id){document.getElementById(id).classList.add('open');if(id==='sheet-date')initDateSheet();}
 function closeSheet(id){document.getElementById(id).classList.remove('open');}
+function computeDueDate(){
+  const emitere=document.getElementById('date-emitere').value;
+  const zile=parseInt(document.getElementById('date-zile').value)||30;
+  if(emitere){const d=new Date(emitere);d.setDate(d.getDate()+zile);document.getElementById('date-scadenta').value=d.toLocaleDateString('ro-RO',{day:'2-digit',month:'short',year:'numeric'});}
+}
+function saveDateSheet(){
+  const emitere=document.getElementById('date-emitere').value;
+  const zile=parseInt(document.getElementById('date-zile').value)||30;
+  if(emitere){
+    const d=new Date(emitere);
+    document.getElementById('sum-emitere').textContent=d.toLocaleDateString('ro-RO',{day:'2-digit',month:'short',year:'numeric'});
+    const due=new Date(emitere);due.setDate(due.getDate()+zile);
+    document.getElementById('sum-scadenta').textContent=due.toLocaleDateString('ro-RO',{day:'2-digit',month:'short',year:'numeric'});
+    document.getElementById('sum-scadenta-label').textContent='Scadență ('+zile+' zile)';
+  }
+  closeSheet('sheet-date');
+}
+function initDateSheet(){
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('date-emitere').value=today;
+  computeDueDate();
+}
 </script>
 </body>
 </html>
