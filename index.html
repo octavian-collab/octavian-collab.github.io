@@ -162,6 +162,13 @@ input, textarea { font-family: inherit; }
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 700; letter-spacing: -.03em; flex-shrink: 0;
 }
+/* Avatar color palette — 6 muted tones */
+.av-0 { background: #D6E8F5; color: #2A5F8F; }
+.av-1 { background: #D4EAE4; color: #2D7A67; }
+.av-2 { background: #EDE0F5; color: #6A3A8A; }
+.av-3 { background: #F5E8D0; color: #8A5A1A; }
+.av-4 { background: #F5DDE0; color: #8A3040; }
+.av-5 { background: #DCE8D8; color: #3A6A2D; }
 .inv-info { flex: 1; min-width: 0; }
 .inv-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
 .inv-meta { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 12px; color: #7A7570; }
@@ -697,7 +704,7 @@ input, textarea { font-family: inherit; }
 const S={co:{name:'',cui:'',initials:''},ccy:{code:'Lei',symbol:''},raw:'',tva:false,desc:'Servicii conform contract',ment:'Factura circulă fara alte detalii',tab:'pf'};
 function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));const el=document.getElementById(id);if(el){el.classList.add('active');const sb=el.querySelector('.sbody');if(sb)sb.scrollTop=0;}}
 function filterInvoices(q){q=q.toLowerCase();document.querySelectorAll('#invoice-list .inv-item').forEach(i=>{i.style.display=i.querySelector('.inv-name').textContent.toLowerCase().includes(q)?'':'none'});}
-function selectCo(name,cui,initials){S.co={name,cui,initials};document.getElementById('amt-co-name').textContent=name;document.getElementById('amt-co-cui').textContent=cui;goTo('s-amount');}
+function selectCo(name,cui,initials){S.co={name,cui,initials};document.getElementById('amt-co-name').textContent=name;document.getElementById('amt-co-cui').textContent=cui;const av=document.getElementById('amt-avatar');if(av){av.textContent=initials;av.className='inv-icon '+avColor(initials);}goTo('s-amount');}
 function filterCompanies(q){q=(q||'').toLowerCase().trim();const r=document.getElementById('co-recent'),rl=document.getElementById('lbl-recent'),ol=document.getElementById('lbl-other');if(!q){r.style.display='';rl.style.display='';ol.style.display='';document.querySelectorAll('#co-other .co-item').forEach(i=>i.style.display='');return;}r.style.display='none';rl.style.display='none';ol.style.display='';document.querySelectorAll('#co-other .co-item').forEach(i=>{i.style.display=i.querySelector('.co-name').textContent.toLowerCase().includes(q)?'':'none';});}
 function switchTab(tab){S.tab=tab;document.getElementById('tab-pf').style.display=tab==='pf'?'':'none';document.getElementById('tab-firma').style.display=tab==='firma'?'':'none';document.getElementById('tab-pf-btn').classList.toggle('active',tab==='pf');document.getElementById('tab-firma-btn').classList.toggle('active',tab==='firma');}
 function addClient(){let name,cui,initials;if(S.tab==='pf'){const p=document.getElementById('pf-p').value.trim(),n=document.getElementById('pf-n').value.trim();if(!p&&!n){closeSheet('sheet-foreign');return;}name=((p+' '+n).trim()).toUpperCase()||'CLIENT NOU';cui=document.getElementById('pf-c').value.trim()||'PF';initials=[p[0],n[0]].filter(Boolean).join('').toUpperCase()||'PF';}else{name=(document.getElementById('firma-n').value.trim()||'FIRMA EXTERNA').toUpperCase();cui=document.getElementById('firma-vies').value.trim()||document.getElementById('firma-cif').value.trim()||document.getElementById('firma-tara').value.trim()||'INT';initials=name.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase()||'FE';}closeSheet('sheet-foreign');selectCo(name,cui,initials);}
@@ -744,6 +751,8 @@ function initDateSheet(){
   document.getElementById('date-emitere').value=today;
   computeDueDate();
 }
+function avColor(s){return'av-'+(s.trim().split('').reduce((n,c)=>n+c.charCodeAt(0),0)%6);}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.inv-icon,.co-avatar').forEach(el=>el.classList.add(avColor(el.textContent)));});
 </script>
 </body>
 </html>
