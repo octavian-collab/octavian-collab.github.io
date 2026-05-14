@@ -51,6 +51,22 @@ const MOBILE_W = 393,
   DESKTOP_H = 800;
 const PROTO_URL = 'https://octavian-collab.github.io/facturi-desktop.html';
 let uid = 1;
+function buildExportText(name, feedback) {
+  const lines = ['Feedback flux facturare Bono', 'De la: ' + name, ''];
+  SCREENS.forEach(sc => {
+    const items = feedback[sc.id] || [];
+    if (!items.length) return;
+    lines.push('## ' + sc.label);
+    items.forEach(i => {
+      lines.push('- ' + i.text + (i.priority ? ' [' + i.priority + ']' : ''));
+    });
+    lines.push('');
+  });
+  lines.push('---');
+  lines.push('Prompt pentru Claude:');
+  lines.push('Ești un product designer senior. Analizează feedbackul de mai sus pe un flux de facturare fintech și generează un raport structurat în română cu: rezumat executiv, puncte forte, probleme (cu prioritate și ecran), pași următori.');
+  return lines.join('\n');
+}
 function App() {
   const [name, setName] = useState('');
   const [started, setStarted] = useState(false);
@@ -62,15 +78,12 @@ function App() {
     priority: null
   });
   const [adding, setAdding] = useState(false);
-  const [report, setReport] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
   const iframeRef = useRef(null);
   const items = feedback[activeScr] || [];
   const totalItems = Object.values(feedback).flat().length;
   const activeIdx = SCREENS.findIndex(s => s.id === activeScr);
   const screensOk = SCREENS.filter(s => (feedback[s.id] || []).length > 0).length;
-
-  // Navigate both feedback panel AND prototype
   const nav = next => {
     setActiveScr(next);
     setAdding(false);
@@ -105,62 +118,12 @@ function App() {
     ...p,
     [scr]: (p[scr] || []).filter(i => i.id !== id)
   }));
-  const generateReport = async () => {
-    setLoading(true);
-    const payload = SCREENS.map(s => ({
-      ecran: s.label,
-      observatii: (feedback[s.id] || []).map(i => ({
-        text: i.text,
-        prioritate: i.priority || '–'
-      }))
-    })).filter(s => s.observatii.length > 0);
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1200,
-          messages: [{
-            role: 'user',
-            content: 'Ești un product designer senior. Analizează feedbackul pe un flux de facturare fintech și generează raport în română.\n\nFeedback de la ' + name + ':\n' + JSON.stringify(payload, null, 2) + '\n\nRăspunde DOAR JSON valid:\n{"rezumat":"string","puncte_forte":["string"],"probleme":[{"problema":"string","prioritate":"Blocker|Important|Nice to have","ecran":"string"}],"pasi_urmatori":["string"]}'
-          }]
-        })
-      });
-      if (!res.ok) {
-        const e = await res.json().catch(() => ({}));
-        setReport({
-          error: true,
-          msg: e?.error?.message || 'HTTP ' + res.status
-        });
-        setLoading(false);
-        return;
-      }
-      const data = await res.json();
-      const txt = data.content?.find(b => b.type === 'text')?.text;
-      if (!txt) {
-        setReport({
-          error: true,
-          msg: data?.error?.message || 'Răspuns gol'
-        });
-        setLoading(false);
-        return;
-      }
-      const clean = txt.replace(/```json|```/g, '').trim();
-      const parsed = JSON.parse(clean);
-      setReport(parsed.rezumat ? parsed : {
-        error: true,
-        msg: 'JSON invalid'
-      });
-    } catch (err) {
-      setReport({
-        error: true,
-        msg: err.message
-      });
-    }
-    setLoading(false);
+  const copyFeedback = () => {
+    const text = buildExportText(name, feedback);
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    });
   };
   const B = {
     pink: {
@@ -195,6 +158,19 @@ function App() {
       borderRadius: 999,
       border: 'none',
       background: '#110D10',
+      color: '#fff',
+      fontSize: 12,
+      fontWeight: 600,
+      cursor: 'pointer',
+      fontFamily: 'inherit',
+      whiteSpace: 'nowrap'
+    },
+    green: {
+      height: 36,
+      padding: '0 14px',
+      borderRadius: 999,
+      border: 'none',
+      background: '#1F7A4D',
       color: '#fff',
       fontSize: 12,
       fontWeight: 600,
@@ -265,7 +241,7 @@ function App() {
       lineHeight: 1.65,
       marginBottom: 28
     }
-  }, "Navighezi prototipul \u0219i la\u0219i observa\u021Bii pe fiecare ecran. Claude sintetizeaz\u0103 feedbackul la final."), /*#__PURE__*/React.createElement("label", {
+  }, "Navighezi prototipul \u0219i la\u0219i observa\u021Bii pe fiecare ecran. La final copiezi feedbackul \u0219i \xEEl trimi\u021Bi \xEEn Claude pentru raport."), /*#__PURE__*/React.createElement("label", {
     style: lbl
   }, "Numele t\u0103u"), /*#__PURE__*/React.createElement("input", {
     value: name,
@@ -302,6 +278,8 @@ function App() {
       fontFamily: 'inherit'
     }
   }, "\xCEncepe review-ul \u2192")));
+  const isLastScreen = activeIdx === SCREENS.length - 1;
+  const allDone = screensOk === SCREENS.length;
   return /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
@@ -383,15 +361,14 @@ function App() {
       fontSize: 11,
       color: '#ABA59E'
     }
-  }, totalItems, " obs \xB7 ", screensOk, "/", SCREENS.length, " ecrane"), /*#__PURE__*/React.createElement("button", {
-    onClick: generateReport,
-    disabled: loading || totalItems === 0,
+  }, totalItems, " obs \xB7 ", screensOk, "/", SCREENS.length, " ecrane"), totalItems > 0 && /*#__PURE__*/React.createElement("button", {
+    onClick: copyFeedback,
     style: {
       ...B.dark,
-      opacity: totalItems === 0 ? .4 : 1,
-      cursor: totalItems === 0 ? 'not-allowed' : 'pointer'
+      background: copied ? '#1F7A4D' : '#110D10',
+      transition: 'background .2s'
     }
-  }, loading ? 'Se generează…' : 'Raport →')), /*#__PURE__*/React.createElement("div", {
+  }, copied ? '✓ Copiat!' : 'Copiază feedbackul')), /*#__PURE__*/React.createElement("div", {
     style: {
       flex: 1,
       display: 'flex',
@@ -477,7 +454,7 @@ function App() {
       display: 'flex',
       flexDirection: 'column'
     }
-  }, !report ? /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", {
     style: {
       padding: 12,
       display: 'flex',
@@ -652,195 +629,76 @@ function App() {
       ...B.outline,
       flex: 1
     }
-  }, "\u2190 \xCEnapoi"), activeIdx < SCREENS.length - 1 ? /*#__PURE__*/React.createElement("button", {
+  }, "\u2190 \xCEnapoi"), !isLastScreen ? /*#__PURE__*/React.createElement("button", {
     onClick: () => nav(SCREENS[activeIdx + 1].id),
     style: {
       ...B.pink,
       flex: 1
     }
   }, "Urm\u0103tor \u2192") : /*#__PURE__*/React.createElement("button", {
-    onClick: generateReport,
-    disabled: loading || totalItems === 0,
+    onClick: copyFeedback,
     style: {
       ...B.dark,
       flex: 1,
-      opacity: totalItems === 0 ? .4 : 1
+      background: copied ? '#1F7A4D' : '#110D10',
+      transition: 'background .2s'
     }
-  }, loading ? '…' : 'Raport ✦'))) : /*#__PURE__*/React.createElement("div", {
+  }, copied ? '✓ Copiat!' : 'Copiază feedbackul')), isLastScreen && /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: 12
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginBottom: 12
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 13,
-      fontWeight: 700,
-      color: '#110D10'
-    }
-  }, "Raport \xB7 ", name), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setReport(null),
-    style: {
-      fontSize: 11,
-      color: '#EE4379',
-      background: 'none',
-      border: 'none',
-      cursor: 'pointer'
-    }
-  }, "\u2190 Editeaz\u0103")), report.error ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 13,
-      fontWeight: 600,
-      color: '#B91C1C',
-      marginBottom: 6
-    }
-  }, "Eroare la generare"), report.msg && /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11,
-      color: '#7A7570',
-      background: '#FCEAEA',
-      padding: '6px 8px',
-      borderRadius: 6,
-      wordBreak: 'break-all',
-      marginBottom: 10
-    }
-  }, report.msg), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setReport(null),
-    style: {
-      fontSize: 11,
-      color: '#EE4379',
-      background: 'none',
-      border: 'none',
-      cursor: 'pointer',
-      padding: 0
-    }
-  }, "\u2190 \xCEncearc\u0103 din nou")) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-    style: {
+      marginTop: 8,
       background: '#FBFAF7',
       border: '1px solid rgba(17,13,16,.08)',
       borderRadius: 10,
-      padding: 11,
-      marginBottom: 9
+      padding: '11px 12px'
     }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: lbl
-  }, "Rezumat"), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 12,
+      fontSize: 11,
+      fontWeight: 600,
       color: '#110D10',
-      lineHeight: 1.65
+      marginBottom: 6
     }
-  }, report.rezumat)), report.puncte_forte?.length > 0 && /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginBottom: 9
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      ...lbl,
-      color: '#1F7A4D'
-    }
-  }, "\u2713 Puncte forte"), report.puncte_forte.map((t, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
+  }, "Cum ob\u021Bii raportul"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
-      gap: 6,
-      marginBottom: 4
+      flexDirection: 'column',
+      gap: 5
+    }
+  }, ['1. Apasă „Copiază feedbackul"', '2. Deschide claude.ai', '3. Paste și trimite — gata'].map((s, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      fontSize: 11,
+      color: '#7A7570',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 7
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       width: 4,
       height: 4,
       borderRadius: '50%',
-      background: '#1F7A4D',
-      flexShrink: 0,
-      marginTop: 6
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      color: '#110D10',
-      lineHeight: 1.55
-    }
-  }, t)))), report.probleme?.length > 0 && /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginBottom: 9
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      ...lbl,
-      color: '#B91C1C'
-    }
-  }, "\u26A0 Probleme"), report.probleme.map((p, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      background: '#fff',
-      border: '1px solid rgba(17,13,16,.08)',
-      borderRadius: 8,
-      padding: '7px 9px',
-      marginBottom: 4
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 4,
-      marginBottom: 3,
-      flexWrap: 'wrap'
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      fontWeight: 600,
-      padding: '1px 6px',
-      borderRadius: 999,
-      background: pBg(p.prioritate),
-      color: pColor(p.prioritate)
-    }
-  }, p.prioritate), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      color: '#ABA59E'
-    }
-  }, p.ecran)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      color: '#110D10',
-      lineHeight: 1.55
-    }
-  }, p.problema)))), report.pasi_urmatori?.length > 0 && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
-    style: lbl
-  }, "Pa\u0219i urm\u0103tori"), report.pasi_urmatori.map((t, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      display: 'flex',
-      gap: 7,
-      marginBottom: 6
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 17,
-      height: 17,
-      borderRadius: '50%',
-      background: '#110D10',
-      color: '#fff',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: 9,
-      fontWeight: 700,
+      background: '#EE4379',
       flexShrink: 0
     }
-  }, i + 1), /*#__PURE__*/React.createElement("div", {
+  }), s))), /*#__PURE__*/React.createElement("a", {
+    href: "https://claude.ai",
+    target: "_blank",
+    rel: "noopener noreferrer",
     style: {
+      display: 'block',
+      marginTop: 10,
+      height: 32,
+      lineHeight: '32px',
+      textAlign: 'center',
+      borderRadius: 999,
+      background: '#110D10',
+      color: '#fff',
       fontSize: 12,
-      color: '#110D10',
-      lineHeight: 1.55
+      fontWeight: 600,
+      textDecoration: 'none'
     }
-  }, t))))))))));
+  }, "Deschide Claude \u2192")))))));
 }
 function ProtoFrame({
   viewport,
