@@ -19,23 +19,28 @@ const {
 const SCREENS = [{
   id: 's1',
   label: 'Lista facturilor',
-  desc: 'Dashboard KPI + lista facturi'
+  desc: 'Dashboard KPI + lista facturi',
+  protoId: 's-list'
 }, {
   id: 's2',
   label: 'Client',
-  desc: 'Selectare client'
+  desc: 'Selectare client',
+  protoId: 's-company'
 }, {
   id: 's3',
   label: 'Sumă & detalii',
-  desc: 'Sumă, descriere, TVA'
+  desc: 'Sumă, descriere, TVA',
+  protoId: 's-amount'
 }, {
   id: 's4',
   label: 'Sumar & emitere',
-  desc: 'Review final'
+  desc: 'Review final',
+  protoId: 's-summary'
 }, {
   id: 's5',
   label: 'Factură emisă',
-  desc: 'Confirmare + ANAF'
+  desc: 'Confirmare + ANAF',
+  protoId: 's-success'
 }];
 const PRIORITIES = ['Blocker', 'Important', 'Nice to have'];
 const pColor = p => p === 'Blocker' ? '#B91C1C' : p === 'Important' ? '#B8580A' : '#1F7A4D';
@@ -59,10 +64,27 @@ function App() {
   const [adding, setAdding] = useState(false);
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(false);
+  const iframeRef = useRef(null);
   const items = feedback[activeScr] || [];
   const totalItems = Object.values(feedback).flat().length;
   const activeIdx = SCREENS.findIndex(s => s.id === activeScr);
   const screensOk = SCREENS.filter(s => (feedback[s.id] || []).length > 0).length;
+
+  // Navigate both feedback panel AND prototype
+  const nav = next => {
+    setActiveScr(next);
+    setAdding(false);
+    setDraft({
+      text: '',
+      priority: null
+    });
+    const screen = SCREENS.find(s => s.id === next);
+    if (screen) {
+      try {
+        iframeRef.current?.contentWindow?.goTo(screen.protoId);
+      } catch (e) {}
+    }
+  };
   const addItem = () => {
     if (!draft.text.trim()) return;
     setFeedback(p => ({
@@ -83,14 +105,6 @@ function App() {
     ...p,
     [scr]: (p[scr] || []).filter(i => i.id !== id)
   }));
-  const nav = next => {
-    setActiveScr(next);
-    setAdding(false);
-    setDraft({
-      text: '',
-      priority: null
-    });
-  };
   const generateReport = async () => {
     setLoading(true);
     const payload = SCREENS.map(s => ({
@@ -384,7 +398,8 @@ function App() {
       overflow: 'hidden'
     }
   }, /*#__PURE__*/React.createElement(ProtoFrame, {
-    viewport: viewport
+    viewport: viewport,
+    iframeRef: iframeRef
   }), /*#__PURE__*/React.createElement("div", {
     style: {
       width: 310,
@@ -828,7 +843,8 @@ function App() {
   }, t))))))))));
 }
 function ProtoFrame({
-  viewport
+  viewport,
+  iframeRef
 }) {
   const isMobile = viewport === 'mobile';
   const containerRef = useRef(null);
@@ -880,6 +896,7 @@ function ProtoFrame({
       transform: `scale(${scale})`
     }
   }, /*#__PURE__*/React.createElement("iframe", {
+    ref: iframeRef,
     src: PROTO_URL,
     style: {
       width: targetW,
