@@ -955,13 +955,15 @@ img,svg{display:block;max-width:100%}
           <span class="amount-ccy" id="amt-ccy-lbl">Lei</span>
         </div>
       </div>
-      <div class="amount-hint" id="amt-hint">Introdu suma fără TVA</div>
-
-      <!-- TVA toggle -->
-      <div class="tva-toggle-row" onclick="toggleTva()" style="margin-bottom:20px">
-        <button class="switch" id="tva-sw"></button>
-        <span class="label">Include TVA (19%)</span>
+      <!-- TVA toggle — centered -->
+      <div style="display:flex;justify-content:center;margin-bottom:16px">
+        <div class="tva-toggle-row" onclick="toggleTva()" style="margin-bottom:0">
+          <button class="switch" id="tva-sw"></button>
+          <span class="label">Include TVA (19%)</span>
+        </div>
       </div>
+
+      <div class="amount-hint" id="amt-hint" style="margin-bottom:16px">Introdu suma fără TVA</div>
 
       <!-- Description -->
       <div class="field" style="width:100%;max-width:440px;margin-bottom:8px">
@@ -980,26 +982,32 @@ img,svg{display:block;max-width:100%}
         </div>
       </div>
 
-      <!-- Qty + UM — collapsed by default -->
+      <!-- Qty + UM — centered, minimal with edit icon -->
       <div style="width:100%;max-width:440px;margin-bottom:16px">
-        <button class="qty-toggle" id="qty-toggle-btn" onclick="toggleQtyPanel()">
-          <span id="qty-summary">1 buc.</span>
-          <svg id="qty-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="transition:transform .2s"><path d="M3 4.5l3 3 3-3"/></svg>
-        </button>
-        <div class="qty-panel" id="qty-panel" style="display:none">
-          <div class="line-row" style="margin-top:10px">
+        <div style="display:flex;justify-content:center">
+          <button onclick="toggleQtyPanel()" style="display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 4px;background:none;border:none;font-size:14px;font-weight:500;color:var(--c-fog);cursor:pointer;font-family:inherit;transition:color .12s" onmouseover="this.style.color='var(--c-ink)'" onmouseout="this.style.color='var(--c-fog)'">
+            <span id="qty-summary">1 buc.</span>
+            <svg id="qty-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 9.5l5-5M9.5 2l2 2-7 7-2.5.5.5-2.5z"/></svg>
+          </button>
+        </div>
+        <div id="qty-panel" style="display:none;padding:8px 4px 0">
+          <div class="line-row" style="justify-content:center">
             <div class="field" style="flex:0 0 90px">
               <div class="field-label">Cant.</div>
               <input class="field-input" type="number" id="line-qty" value="1" min="0.01"
                      step="any" oninput="onLineChange()" style="text-align:center">
             </div>
-            <div class="field" style="flex:0 0 140px">
+            <div class="field" style="flex:0 0 160px">
               <div class="field-label">U.M.</div>
-              <div class="um-tabs" id="um-tabs">
-                <button class="active" onclick="setUM(this,'buc')">buc.</button>
-                <button onclick="setUM(this,'ore')">ore</button>
-                <button onclick="setUM(this,'km')">km</button>
-              </div>
+              <select id="um-select" class="field-input" onchange="setUMSelect(this.value)" style="cursor:pointer">
+                <option value="buc">buc.</option>
+                <option value="ore">ore</option>
+                <option value="km">km</option>
+                <option value="kg">kg</option>
+                <option value="l">litri</option>
+                <option value="mp">m²</option>
+                <option value="ml">ml</option>
+              </select>
             </div>
           </div>
         </div>
@@ -1695,10 +1703,20 @@ function setDesc(txt) {
 /* ── Qty panel toggle ── */
 function toggleQtyPanel() {
   const panel = document.getElementById('qty-panel');
-  const chevron = document.getElementById('qty-chevron');
+  const icon  = document.getElementById('qty-icon');
+  if (!panel) return;
   const open = panel.style.display !== 'none';
   panel.style.display = open ? 'none' : '';
-  chevron.style.transform = open ? '' : 'rotate(180deg)';
+  if (icon) icon.innerHTML = open
+    ? '<path d="M2 9.5l5-5M9.5 2l2 2-7 7-2.5.5.5-2.5z"/>'
+    : '<path d="M2 2l10 10M12 2L2 12"/>';
+}
+
+function setUMSelect(val) {
+  S.line.um = val;
+  const sumEl = document.getElementById('qty-summary');
+  if (sumEl) sumEl.textContent = (S.line.qty || 1) + ' ' + val + '.';
+  updateLineTotal();
 }
 
 /* ── Line change → recalculate total ── */
@@ -1710,8 +1728,10 @@ function onLineChange() {
   S.line.price = parseFloat(rawPrice) || 0;
 
   // Update qty summary label
+  const umVal = document.getElementById('um-select')?.value || S.line.um || 'buc';
+  S.line.um = umVal;
   const sumEl = document.getElementById('qty-summary');
-  if (sumEl) sumEl.textContent = S.line.qty + ' ' + (S.line.um || 'buc') + '.';
+  if (sumEl) sumEl.textContent = S.line.qty + ' ' + umVal + '.';
 
   // Enable / disable CTA — must run before sizeAmtInput
   const valid = S.line.price > 0;
